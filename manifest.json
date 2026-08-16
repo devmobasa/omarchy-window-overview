@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "community.window-overview",
+  "name": "Window Overview",
+  "version": "0.1.0",
+  "author": "devmobasa",
+  "description": "Exposé: every workspace with live window thumbnails — click to focus, drag to move",
+  "license": "MIT",
+  "kinds": ["panel"],
+  "entryPoints": {
+    "panel": "Overview.qml"
+  }
+}

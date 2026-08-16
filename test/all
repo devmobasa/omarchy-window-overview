@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+OMARCHY_SOURCE="${OMARCHY_PATH:-/usr/share/omarchy}"
+for t in test/*.test.js; do
+  node "$t"
+done
+omarchy plugin validate .
+qmllint -I "$OMARCHY_SOURCE/shell" Overview.qml
+echo "ok - window overview manifest and QML"
