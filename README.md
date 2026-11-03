@@ -25,11 +25,19 @@ Toggle it:
 omarchy-shell shell toggle community.window-overview '{}'
 ```
 
+Show only the focused workspace by passing a scope in the payload:
+
+```sh
+omarchy-shell shell toggle community.window-overview '{"scope":"current"}'
+```
+
 Keybinding for `~/.config/hypr/bindings.lua` (`SUPER + TAB` is Omarchy's
 next-workspace bind — pick a free chord or unbind it first):
 
 ```lua
 o.bind("SUPER + GRAVE", "Window overview", "omarchy-shell shell toggle community.window-overview '{}'")
+-- or only the focused workspace:
+o.bind("SUPER + GRAVE", "Window overview", [[omarchy-shell shell toggle community.window-overview '{"scope":"current"}']])
 ```
 
 ## Requirements

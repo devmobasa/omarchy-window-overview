@@ -75,6 +75,31 @@ function restoreDispatch(address, workspaceId) {
     + "), window = hl.get_window('address:" + addr + "') })"
 }
 
+// Open payload: {"scope":"current"} limits the overview to the focused
+// workspace. Anything else, including an empty or malformed payload, keeps
+// the default of every workspace.
+function parseScope(payloadJson) {
+  var payload = payloadJson
+  if (typeof payload === "string") {
+    if (payload.trim().length === 0) return "all"
+    try {
+      payload = JSON.parse(payload)
+    } catch (e) {
+      return "all"
+    }
+  }
+  return payload && payload.scope === "current" ? "current" : "all"
+}
+
+// Narrow sorted workspace ids to the scoped one. A non-positive scope id
+// (no scope, or a special workspace had focus) leaves the list untouched.
+function scopeWorkspaceIds(ids, scopeId) {
+  var list = ids || []
+  var id = Number(scopeId)
+  if (!isFinite(id) || id <= 0) return list
+  return list.filter(function (candidate) { return candidate === id })
+}
+
 // Workspace grid: near-square, biased one column wider (screens are wide).
 function gridColumns(count) {
   var n = Math.max(1, Number(count) || 1)
@@ -113,6 +138,8 @@ if (typeof module !== "undefined") {
     restoreDispatch: restoreDispatch,
     sortWorkspaceIds: sortWorkspaceIds,
     sortSpecialIds: sortSpecialIds,
+    parseScope: parseScope,
+    scopeWorkspaceIds: scopeWorkspaceIds,
     specialLabel: specialLabel,
     gridColumns: gridColumns,
     tileGrid: tileGrid,

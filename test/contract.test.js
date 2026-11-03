@@ -40,6 +40,8 @@ assert.match(panel, /OverviewModel\.moveDispatch/)
 assert.match(panel, /OverviewModel\.workspaceFocusDispatch/)
 assert.match(panel, /OverviewModel\.sortWorkspaceIds/)
 assert.match(panel, /OverviewModel\.flattenWindows/)
+assert.match(panel, /OverviewModel\.parseScope\(payloadJson\)/, 'open() honours the scope payload')
+assert.match(panel, /OverviewModel\.scopeWorkspaceIds\(/)
 assert.match(panel, /if \(request === ""\) return/, 'empty (rejected) dispatches never fire')
 assert.match(panel, /Hyprland\.dispatch\(request\)/)
 
