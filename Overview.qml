@@ -28,8 +28,10 @@ Item {
   property bool closingFromHost: false
   property int selectedIndex: -1
   property string dragAddress: ""
+  property string pendingDispatch: ""
 
   function open(payloadJson) {
+    root.pendingDispatch = ""
     root.targetScreen = targetScreenForOpen()
     root.selectedIndex = -1
     root.dragAddress = ""
@@ -138,8 +140,20 @@ Item {
 
   function dispatchAndClose(request) {
     if (request === "") return
-    Hyprland.dispatch(request)
-    requestClose()
+    root.pendingDispatch = request
+    root.opened = false
+  }
+
+  Connections {
+    target: Hyprland
+    function onRawEvent(event) {
+      if (root.pendingDispatch === "" || event.name !== "closelayer") return
+      if (String(event.data) !== "omarchy-window-overview") return
+      var request = root.pendingDispatch
+      root.pendingDispatch = ""
+      Hyprland.dispatch(request)
+      root.requestClose()
+    }
   }
 
   function focusWindow(address) {
