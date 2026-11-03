@@ -28,10 +28,10 @@ Item {
   property bool closingFromHost: false
   property int selectedIndex: -1
   property string dragAddress: ""
-  property string pendingDispatch: ""
+  property var pendingDispatches: []
 
   function open(payloadJson) {
-    root.pendingDispatch = ""
+    root.pendingDispatches = []
     root.targetScreen = targetScreenForOpen()
     root.selectedIndex = -1
     root.dragAddress = ""
@@ -138,26 +138,26 @@ Item {
     dispatchAndClose(request)
   }
 
-  function dispatchAndClose(request) {
+  function dispatchAndClose(request, followUp) {
     if (request === "") return
-    root.pendingDispatch = request
+    root.pendingDispatches = followUp ? [request, followUp] : [request]
     root.opened = false
   }
 
   Connections {
     target: Hyprland
     function onRawEvent(event) {
-      if (root.pendingDispatch === "" || event.name !== "closelayer") return
+      if (root.pendingDispatches.length === 0 || event.name !== "closelayer") return
       if (String(event.data) !== "omarchy-window-overview") return
-      var request = root.pendingDispatch
-      root.pendingDispatch = ""
-      Hyprland.dispatch(request)
+      var requests = root.pendingDispatches
+      root.pendingDispatches = []
+      for (var i = 0; i < requests.length; i++) Hyprland.dispatch(requests[i])
       root.requestClose()
     }
   }
 
   function focusWindow(address) {
-    dispatchAndClose(OverviewModel.focusDispatch(address))
+    dispatchAndClose(OverviewModel.focusDispatch(address), OverviewModel.raiseDispatch(address))
   }
 
   function moveWindow(address, workspaceId) {

@@ -17,6 +17,11 @@ assert.equal(model.focusDispatch('563e004c1e40'),
   "hl.dsp.focus({ window = hl.get_window('address:0x563e004c1e40') })")
 assert.equal(model.focusDispatch('nope'), '', 'invalid addresses build nothing')
 
+assert.equal(model.raiseDispatch('563e004c1e40'),
+  "hl.dsp.window.alter_zorder({ mode = 'top', window = hl.get_window('address:0x563e004c1e40') })",
+  'focusing does not raise floating windows, so the overview raises explicitly')
+assert.equal(model.raiseDispatch('nope'), '')
+
 assert.equal(model.moveDispatch('0xabc', 3),
   "hl.dsp.window.move({ workspace = tostring(3), window = hl.get_window('address:0xabc'), follow = false })")
 assert.equal(model.moveDispatch('0xabc', 0), '', 'workspace ids are positive integers')
