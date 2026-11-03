@@ -24,6 +24,12 @@ function focusDispatch(address) {
   return "hl.dsp.focus({ window = hl.get_window('address:" + addr + "') })"
 }
 
+function raiseDispatch(address) {
+  var addr = ensure0x(address)
+  if (!isValidAddress(addr)) return ""
+  return "hl.dsp.window.alter_zorder({ mode = 'top', window = hl.get_window('address:" + addr + "') })"
+}
+
 function moveDispatch(address, workspaceId) {
   var addr = ensure0x(address)
   var id = Number(workspaceId)
@@ -108,6 +114,7 @@ if (typeof module !== "undefined") {
     ensure0x: ensure0x,
     isValidAddress: isValidAddress,
     focusDispatch: focusDispatch,
+    raiseDispatch: raiseDispatch,
     moveDispatch: moveDispatch,
     workspaceFocusDispatch: workspaceFocusDispatch,
     restoreDispatch: restoreDispatch,

@@ -43,6 +43,16 @@ assert.match(panel, /OverviewModel\.flattenWindows/)
 assert.match(panel, /if \(request === ""\) return/, 'empty (rejected) dispatches never fire')
 assert.match(panel, /Hyprland\.dispatch\(request\)/)
 
+assert.match(panel, /pendingDispatch/)
+assert.match(panel, /function onRawEvent\(event\)/)
+assert.match(panel, /event\.name !== "closelayer"/)
+const dispatchAndClose = panel.match(/function dispatchAndClose\(request[^)]*\) \{[\s\S]*?\n  \}/)
+assert.ok(dispatchAndClose, 'dispatchAndClose exists')
+assert.doesNotMatch(dispatchAndClose[0], /Hyprland\.dispatch|requestClose/,
+  'never dispatch while the overlay holds the keyboard, never unload before dispatching')
+assert.match(dispatchAndClose[0], /root\.opened = false/)
+assert.match(panel, /OverviewModel\.raiseDispatch\(address\)/, 'a picked floating window comes to the front')
+
 // Thumbnails: live screencopy of each toplevel, active only while open.
 assert.match(panel, /ScreencopyView \{/)
 assert.match(panel, /captureSource: tile\.modelData && tile\.modelData\.wayland/)
