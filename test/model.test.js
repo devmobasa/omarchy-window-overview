@@ -62,4 +62,18 @@ const flat = model.flattenWindows([
 assert.equal(flat.length, 3)
 assert.deepEqual(flat[2], { workspaceId: 3, address: '0xc' })
 
+assert.equal(model.parseScope('{"scope":"current"}'), 'current')
+assert.equal(model.parseScope({ scope: 'current' }), 'current', 'already-parsed payloads work too')
+assert.equal(model.parseScope('{}'), 'all')
+assert.equal(model.parseScope(''), 'all', 'the host sends an empty string when no payload is given')
+assert.equal(model.parseScope('{"scope":"everything"}'), 'all', 'unknown scopes fall back to all')
+assert.equal(model.parseScope('not json'), 'all', 'malformed payloads never throw')
+assert.equal(model.parseScope(null), 'all')
+
+assert.deepEqual(model.scopeWorkspaceIds([1, 2, 5], 5), [5])
+assert.deepEqual(model.scopeWorkspaceIds([1, 2, 5], -1), [1, 2, 5], 'no scope keeps every workspace')
+assert.deepEqual(model.scopeWorkspaceIds([1, 2, 5], -98), [1, 2, 5], 'a focused special workspace keeps every workspace')
+assert.deepEqual(model.scopeWorkspaceIds([1, 2], 7), [], 'a scoped id that is gone yields no cells')
+assert.deepEqual(model.scopeWorkspaceIds(null, 3), [])
+
 console.log('ok - overview model')

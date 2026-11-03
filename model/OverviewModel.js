@@ -75,6 +75,26 @@ function restoreDispatch(address, workspaceId) {
     + "), window = hl.get_window('address:" + addr + "') })"
 }
 
+function parseScope(payloadJson) {
+  var payload = payloadJson
+  if (typeof payload === "string") {
+    if (payload.trim().length === 0) return "all"
+    try {
+      payload = JSON.parse(payload)
+    } catch (e) {
+      return "all"
+    }
+  }
+  return payload && payload.scope === "current" ? "current" : "all"
+}
+
+function scopeWorkspaceIds(ids, scopeId) {
+  var list = ids || []
+  var id = Number(scopeId)
+  if (!isFinite(id) || id <= 0) return list
+  return list.filter(function (candidate) { return candidate === id })
+}
+
 // Workspace grid: near-square, biased one column wider (screens are wide).
 function gridColumns(count) {
   var n = Math.max(1, Number(count) || 1)
@@ -113,6 +133,8 @@ if (typeof module !== "undefined") {
     restoreDispatch: restoreDispatch,
     sortWorkspaceIds: sortWorkspaceIds,
     sortSpecialIds: sortSpecialIds,
+    parseScope: parseScope,
+    scopeWorkspaceIds: scopeWorkspaceIds,
     specialLabel: specialLabel,
     gridColumns: gridColumns,
     tileGrid: tileGrid,

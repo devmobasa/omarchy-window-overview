@@ -28,8 +28,11 @@ Item {
   property bool closingFromHost: false
   property int selectedIndex: -1
   property string dragAddress: ""
+  property int scopeWorkspaceId: -1
 
   function open(payloadJson) {
+    var focusedId = Hyprland.focusedWorkspace ? Number(Hyprland.focusedWorkspace.id) : -1
+    root.scopeWorkspaceId = OverviewModel.parseScope(payloadJson) === "current" ? focusedId : -1
     root.targetScreen = targetScreenForOpen()
     root.selectedIndex = -1
     root.dragAddress = ""
@@ -61,6 +64,7 @@ Item {
     return JSON.stringify({
       opened: root.opened,
       screen: root.targetScreen ? String(root.targetScreen.name || "") : "",
+      scope: root.scopeWorkspaceId > 0 ? "current" : "all",
       workspaces: root.workspaceCells.length,
       windows: root.flatWindows.length,
       selectedIndex: root.selectedIndex
@@ -89,7 +93,7 @@ Item {
       byId[workspace.id] = workspace
       ids.push(workspace.id)
     }
-    var sorted = OverviewModel.sortWorkspaceIds(ids)
+    var sorted = OverviewModel.scopeWorkspaceIds(OverviewModel.sortWorkspaceIds(ids), root.scopeWorkspaceId)
     var cells = []
     for (var j = 0; j < sorted.length; j++) {
       var ws = byId[sorted[j]]
