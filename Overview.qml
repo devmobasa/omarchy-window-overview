@@ -28,7 +28,6 @@ Item {
   property bool closingFromHost: false
   property int selectedIndex: -1
   property string dragAddress: ""
-  // Workspace the overview is scoped to; -1 shows every workspace.
   property int scopeWorkspaceId: -1
 
   function open(payloadJson) {

@@ -62,8 +62,6 @@ const flat = model.flattenWindows([
 assert.equal(flat.length, 3)
 assert.deepEqual(flat[2], { workspaceId: 3, address: '0xc' })
 
-// ---- open scope ---------------------------------------------------------------
-
 assert.equal(model.parseScope('{"scope":"current"}'), 'current')
 assert.equal(model.parseScope({ scope: 'current' }), 'current', 'already-parsed payloads work too')
 assert.equal(model.parseScope('{}'), 'all')

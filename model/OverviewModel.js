@@ -75,9 +75,6 @@ function restoreDispatch(address, workspaceId) {
     + "), window = hl.get_window('address:" + addr + "') })"
 }
 
-// Open payload: {"scope":"current"} limits the overview to the focused
-// workspace. Anything else, including an empty or malformed payload, keeps
-// the default of every workspace.
 function parseScope(payloadJson) {
   var payload = payloadJson
   if (typeof payload === "string") {
@@ -91,8 +88,6 @@ function parseScope(payloadJson) {
   return payload && payload.scope === "current" ? "current" : "all"
 }
 
-// Narrow sorted workspace ids to the scoped one. A non-positive scope id
-// (no scope, or a special workspace had focus) leaves the list untouched.
 function scopeWorkspaceIds(ids, scopeId) {
   var list = ids || []
   var id = Number(scopeId)

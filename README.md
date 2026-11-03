@@ -36,7 +36,11 @@ next-workspace bind — pick a free chord or unbind it first):
 
 ```lua
 o.bind("SUPER + GRAVE", "Window overview", "omarchy-shell shell toggle community.window-overview '{}'")
--- or only the focused workspace:
+```
+
+Or only the focused workspace:
+
+```lua
 o.bind("SUPER + GRAVE", "Window overview", [[omarchy-shell shell toggle community.window-overview '{"scope":"current"}']])
 ```
 
