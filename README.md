@@ -4,6 +4,7 @@ Mission-Control-style exposé for [Omarchy](https://omarchy.org) v4: every
 workspace as a card with **live** thumbnails of its windows.
 
 - **Click** a window to focus it; click a workspace header to switch there.
+- **Middle-click** a window to close it (the overview stays open).
 - **Drag** a window onto another workspace card to move it (silently — the
   overview stays put so you can keep rearranging).
 - **Keyboard**: arrows/Tab walk the windows, Enter focuses, `1`–`9`,`0`
