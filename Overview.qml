@@ -146,6 +146,14 @@ Item {
     dispatchAndClose(OverviewModel.focusDispatch(address))
   }
 
+  function closeWindow(address) {
+    var request = OverviewModel.closeDispatch(address)
+    if (request === "") return
+    Hyprland.dispatch(request)
+    Hyprland.refreshToplevels()
+    Hyprland.refreshWorkspaces()
+  }
+
   function moveWindow(address, workspaceId) {
     var request = OverviewModel.moveDispatch(address, workspaceId)
     if (request === "") return
@@ -366,7 +374,11 @@ Item {
                     MouseArea {
                       id: tileMouse
                       anchors.fill: parent
-                      onClicked: root.focusWindow(tile.tileAddress)
+                      acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                      onClicked: function (mouse) {
+                        if (mouse.button === Qt.MiddleButton) root.closeWindow(tile.tileAddress)
+                        else root.focusWindow(tile.tileAddress)
+                      }
                     }
 
                     DragHandler {
@@ -458,7 +470,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Style.space(18)
-        text: "Click to focus · drag between workspaces · 1-9,0 jumps"
+        text: "Click to focus · middle-click to close · drag between workspaces · 1-9,0 jumps"
           + (root.specialCells.length > 0 ? " · minimized windows restore from below" : "")
           + " · Esc closes"
         color: Qt.darker(Color.menu.text, 1.4)
